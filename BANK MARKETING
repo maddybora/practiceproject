@@ -1,0 +1,46 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+from sklearn.preprocessing import LabelEncoder
+
+# Step 1: Data Preparation
+train_url = "https://raw.githubusercontent.com/dsrscientist/dataset5/main/termdeposit_train.csv"
+test_url = "https://raw.githubusercontent.com/dsrscientist/dataset5/main/termdeposit_test.csv"
+train_data = pd.read_csv(train_url)
+test_data = pd.read_csv(test_url)
+
+# Step 2: Data Exploration and Preprocessing
+# No missing values or outliers, so no preprocessing required.
+
+# Splitting the training dataset into features and target variable
+features = train_data.drop(['ID', 'subscribed'], axis=1)
+target = train_data['subscribed']
+
+# Step 3: Feature Selection and Engineering
+# No specific feature selection or engineering in this example.
+
+# Step 4: Data Split
+X_train, X_val, y_train, y_val = train_test_split(features, target, test_size=0.2, random_state=42)
+
+# Step 5: Data Encoding
+# Encode categorical variables
+le = LabelEncoder()
+X_train_encoded = X_train.apply(le.fit_transform)
+X_val_encoded = X_val.apply(le.transform)
+
+# Step 6: Model Selection and Training
+model = RandomForestClassifier()
+model.fit(X_train_encoded, y_train)
+
+# Step 7: Model Evaluation
+y_pred = model.predict(X_val_encoded)
+print(classification_report(y_val, y_pred))
+
+# Step 8: Predict on the test dataset
+X_test_encoded = test_data.drop('ID', axis=1).apply(le.transform)
+test_predictions = model.predict(X_test_encoded)
+
+# Optional: Save test predictions to a CSV file
+test_data['predictions'] = test_predictions
+test_data.to_csv('termdeposit_predictions.csv', index=False)
