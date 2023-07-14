@@ -1,0 +1,32 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+
+# Step 1: Data Preparation
+url = "https://raw.githubusercontent.com/dsrscientist/dataset3/main/glass.csv"
+glass_data = pd.read_csv(url)
+
+# Step 2: Data Exploration and Preprocessing
+# No missing values or outliers, so no preprocessing required.
+
+# Splitting into features and target variable
+features = glass_data.drop('Type', axis=1)
+target = glass_data['Type']
+
+# Step 3: Feature Selection and Engineering
+# No specific feature selection or engineering in this example.
+
+# Step 4: Data Split
+X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
+
+# Step 5: Model Selection and Training
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+
+# Step 6: Model Evaluation
+y_pred = model.predict(X_test)
+print(classification_report(y_test, y_pred))
+
+# Step 7: Model Deployment
+# You can deploy the model for future use as per your requirement.
